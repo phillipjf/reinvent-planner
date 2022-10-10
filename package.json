@@ -3,20 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "lodash-es": "^4.17.15",
-    "moment": "^2.24.0",
-    "node-sass": "^4.12.0",
-    "react": "^16.10.1",
-    "react-big-calendar": "^0.22.1",
-    "react-contextmenu": "^2.11.0",
-    "react-copy-to-clipboard": "^5.0.1",
-    "react-dom": "^16.10.1",
-    "react-modal": "^3.10.1",
-    "react-redux": "^7.1.1",
-    "react-scripts": "3.1.2",
-    "react-syntax-highlighter": "^11.0.2",
-    "redux": "^4.0.4",
-    "reselect": "^4.0.0"
+    "lodash-es": "^4.17.21",
+    "moment": "^2.29.4",
+    "node-sass": "^7.0.3",
+    "react": "^17",
+    "react-big-calendar": "^0",
+    "react-contextmenu": "^2.14.0",
+    "react-copy-to-clipboard": "^5.1.0",
+    "react-dom": "^17",
+    "react-modal": "^3.15.1",
+    "react-redux": "^8.0.4",
+    "react-scripts": "^5",
+    "react-syntax-highlighter": "^15.5.0",
+    "redux": "^4.2.0",
+    "reselect": "^4.1.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,6 +34,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "redux-devtools-extension": "^2.13.8"
+    "@redux-devtools/extension": "^3"
   }
 }

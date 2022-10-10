@@ -7,7 +7,7 @@ import {
   FILTER_EVENTS,
   TOGGLE_FILTERS,
   SET_EVENT_PRIORITY,
-  SET_EVENT_DELETE_STATE
+  SET_EVENT_DELETE_STATE,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -19,10 +19,10 @@ const INITIAL_STATE = {
   filteredEvents: [],
   isEventsLoaderShown: false,
   importError: "",
-  isFiltersShown: false
+  isFiltersShown: false,
 };
 
-export default (state = INITIAL_STATE, action) => {
+const EventsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOAD_APP_SUCCESS:
       return {
@@ -30,7 +30,7 @@ export default (state = INITIAL_STATE, action) => {
         events: action.payload.events,
         eventsUserData: action.payload.eventsUserData,
         locations: action.payload.locations,
-        types: action.payload.types
+        types: action.payload.types,
       };
     case IMPORT_EVENTS_SUCCESS:
       return {
@@ -39,69 +39,70 @@ export default (state = INITIAL_STATE, action) => {
         locations: action.payload.locations,
         types: action.payload.types,
         importError: "",
-        isEventsLoaderShown: false
+        isEventsLoaderShown: false,
       };
     case IMPORT_EVENTS_FAIL:
       return {
         ...state,
-        importError: action.payload
+        importError: action.payload,
       };
     case TOGGLE_EVENTS_LOADER:
       if (action.payload === null) {
         return {
           ...state,
-          isEventsLoaderShown: !state.isEventsLoaderShown
+          isEventsLoaderShown: !state.isEventsLoaderShown,
         };
       }
       return {
         ...state,
-        isEventsLoaderShown: action.payload
+        isEventsLoaderShown: action.payload,
       };
     case FILTER_EVENTS:
       return {
         ...state,
-        filteredEvents: action.payload
+        filteredEvents: action.payload,
       };
     case TOGGLE_FILTERS:
       if (action.payload === null) {
         return {
           ...state,
-          isFiltersShown: !state.isFiltersShown
+          isFiltersShown: !state.isFiltersShown,
         };
       }
       return {
         ...state,
-        isFiltersShown: action.payload
+        isFiltersShown: action.payload,
       };
     case SET_EVENT_PRIORITY: {
       const { id, priority } = action.payload;
       const newEventUserData = {
         ...state.eventsUserData[id],
-        priority
+        priority,
       };
       return {
         ...state,
         eventsUserData: {
           ...state.eventsUserData,
-          [id]: newEventUserData
-        }
+          [id]: newEventUserData,
+        },
       };
     }
     case SET_EVENT_DELETE_STATE: {
       const { id, deleted } = action.payload;
       const newEventUserData = {
         ...state.eventsUserData[id],
-        deleted
+        deleted,
       };
       return {
         ...state,
         eventsUserData: {
           ...state.eventsUserData,
-          [id]: newEventUserData
-        }
+          [id]: newEventUserData,
+        },
       };
     }
     default:
       return state;
   }
 };
+export default EventsReducer;

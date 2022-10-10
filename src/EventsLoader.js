@@ -102,10 +102,9 @@ class EventsLoader extends Component {
 
 const mapStateToProps = ({ events }) => ({
   isEventsLoaderShown: events.isEventsLoaderShown,
-  importError: events.importError
+  importError: events.importError,
 });
 
-export default connect(
-  mapStateToProps,
-  { importEvents, toggleEventsLoader }
-)(EventsLoader);
+export default connect(mapStateToProps, { importEvents, toggleEventsLoader })(
+  EventsLoader
+);

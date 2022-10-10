@@ -9,14 +9,14 @@ export default class CodeSnippet extends Component {
     super();
     this.state = {
       codeString: "",
-      copied: false
+      copied: false,
     };
   }
 
   componentDidMount() {
-    fetch("scrapper.js")
-      .then(res => res.text())
-      .then(codeString => this.setState({ codeString }));
+    fetch("scraper.js")
+      .then((res) => res.text())
+      .then((codeString) => this.setState({ codeString }));
   }
 
   render() {
@@ -37,7 +37,7 @@ export default class CodeSnippet extends Component {
           customStyle={{
             overflow: "scroll",
             width: "100%",
-            height: "100%"
+            height: "100%",
           }}
         >
           {this.state.codeString}

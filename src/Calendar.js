@@ -7,7 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
-export default ({ events }) => {
+const SessionCalendar = ({ events }) => {
   if (!events) {
     return null;
   }
@@ -22,12 +22,12 @@ export default ({ events }) => {
         tooltipAccessor="tooltip"
         events={events}
         components={{ event: Event }}
-        onDoubleClickEvent={event => {
+        onDoubleClickEvent={(event) => {
           if (event.link) {
             window.open(event.link, "_blank");
           }
         }}
-        eventPropGetter={event => {
+        eventPropGetter={(event) => {
           const locationColors = {
             park: "#f9f7dd",
             aria: "#93b21f",
@@ -42,7 +42,7 @@ export default ({ events }) => {
             "harrah's": "#fff797",
             venetian: "#45b9f2",
             wynn: "#7ac142",
-            encore: "#7f3f97"
+            encore: "#7f3f97",
           };
           const styles = {};
           try {
@@ -61,3 +61,4 @@ export default ({ events }) => {
     </div>
   );
 };
+export default SessionCalendar;

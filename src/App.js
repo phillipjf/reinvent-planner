@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Header from "./Header";
 import Filters from "./Filters";
 import EventsLoader from "./EventsLoader";
-import Calendar from "./Calendar";
+import SessionCalendar from "./Calendar";
 import { loadApp } from "./actions";
 
 import "./App.scss";
@@ -24,7 +24,7 @@ class App extends Component {
       <div className={classNames.join(" ")}>
         <Header />
         <Filters />
-        <Calendar events={filteredEvents} />
+        <SessionCalendar events={filteredEvents} />
         <EventsLoader />
       </div>
     );
@@ -33,10 +33,7 @@ class App extends Component {
 
 const mapStateToProps = ({ events }) => ({
   filteredEvents: events.filteredEvents,
-  isFiltersShown: events.isFiltersShown
+  isFiltersShown: events.isFiltersShown,
 });
 
-export default connect(
-  mapStateToProps,
-  { loadApp }
-)(App);
+export default connect(mapStateToProps, { loadApp })(App);

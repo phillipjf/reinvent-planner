@@ -8,7 +8,6 @@ How-to video: https://www.dropbox.com/s/ox4vf6ahidd3z3y/reinvent-planner.mov?dl=
 
 ![Screenshot](images/reInventPlanner-screenshot.png)
 
-
 ## NOTE: UPDATE 2019
 
 The tool has been updated for 2019 but it seems like AWS has not yet disclosed the location of each session, so those will show up as `null` in your schedule for the moment until they start publishing that information again.
@@ -24,13 +23,13 @@ The tool has been updated for 2019 but it seems like AWS has not yet disclosed t
 - Clone this repository
 - Install node dependencies
 
-  ```
+  ```sh
   $ npm install
   ```
 
 - Start development server
 
-  ```
+  ```sh
   $ npm start
   ```
 

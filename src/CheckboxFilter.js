@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ name, checked, onChange }) => {
+const CheckboxFilter = ({ name, checked, onChange }) => {
   return (
     <label>
       <input
@@ -12,3 +12,5 @@ export default ({ name, checked, onChange }) => {
     </label>
   );
 };
+
+export default CheckboxFilter;

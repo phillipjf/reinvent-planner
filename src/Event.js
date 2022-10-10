@@ -6,12 +6,12 @@ import "./Event.scss";
 
 class Event extends PureComponent {
   renderPriorityMenuItems() {
-    return this.props.priorities.map(priority => (
+    return this.props.priorities.map((priority) => (
       <MenuItem
         key={priority}
-        onClick={() =>
-          this.props.setEventPriority({ id: this.props.event.id, priority })
-        }
+        onClick={() => {
+          this.props.setEventPriority({ id: this.props.event.id, priority });
+        }}
       >
         {priority}
       </MenuItem>
@@ -21,7 +21,7 @@ class Event extends PureComponent {
     const {
       event: { id, title, tooltip, deleted },
       deleteEvent,
-      restoreEvent
+      restoreEvent,
     } = this.props;
 
     return (
@@ -44,10 +44,11 @@ class Event extends PureComponent {
 }
 
 const mapStateToProps = ({ events }) => ({
-  priorities: events.priorities
+  priorities: events.priorities,
 });
 
-export default connect(
-  mapStateToProps,
-  { setEventPriority, deleteEvent, restoreEvent }
-)(Event);
+export default connect(mapStateToProps, {
+  setEventPriority,
+  deleteEvent,
+  restoreEvent,
+})(Event);
