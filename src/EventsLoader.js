@@ -1,53 +1,169 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import ReactModal from "react-modal";
 import CodeSnippet from "./CodeSnippet";
 import Button from "./Button";
 import { importEvents, toggleEventsLoader } from "./actions";
+import { useQuery, gql } from "@apollo/client";
 
 ReactModal.setAppElement("#root");
 
-class EventsLoader extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { rawEvents: "" };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    const rawEvents = localStorage.getItem("rawEvents");
-    if (rawEvents) {
-      this.setState({ rawEvents });
+const GET_CALENDAR = gql`
+  query AttendeeCalendar($eventId: ID!, $limit: Int, $nextToken: String) {
+    event(id: $eventId) {
+      id
+      mySessions(limit: $limit, nextToken: $nextToken) {
+        items {
+          ...SessionCalendar
+          __typename
+        }
+        __typename
+      }
+      myFavorites(limit: $limit, nextToken: $nextToken) {
+        items {
+          ...SessionCalendar
+          __typename
+        }
+        __typename
+      }
+      myUserSessions {
+        items {
+          ...UserCalendar
+          __typename
+        }
+        __typename
+      }
+      sessionCatalog {
+        facets {
+          venues {
+            items {
+              id
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
     }
   }
 
-  handleChange(event) {
-    this.setState({ rawEvents: event.target.value });
+  fragment SessionCalendar on Session {
+    eventId
+    sessionId
+    name
+    description
+    startTime
+    endTime
+    duration
+    isBlocking
+    alias
+    status
+    isEmbargoed
+    location
+    type
+    level
+    package {
+      itemId
+      __typename
+    }
+    sessionType {
+      name
+      __typename
+    }
+    tracks {
+      name
+      __typename
+    }
+    venue {
+      name
+      __typename
+    }
+    room {
+      name
+      __typename
+    }
+    capacities {
+      total
+      reservableRemaining
+      waitlistRemaining
+      __typename
+    }
+    price {
+      currency
+      value
+      __typename
+    }
+    isPaidSession
+    isFavoritedByMe
+    myReservationStatus
+    action
+    __typename
   }
 
-  handleSubmit(e) {
+  fragment UserCalendar on UserSession {
+    eventId
+    sessionId
+    name
+    description
+    startTime
+    endTime
+    duration
+    isBlocking
+    location
+    __typename
+  }
+`;
+
+function EventsLoader(props) {
+  const [rawEvents, setRawEvents] = useState("");
+  const [token, setToken] = useState("");
+  const { loading, error, data } = useQuery(GET_CALENDAR, {
+    variables: {
+      eventId: "53b5de8d-7b9d-4fcc-a178-6433641075fe",
+      limit: 100,
+      nextToken: "",
+    },
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setToken(token);
+    }
+    const rawEvents = localStorage.getItem("rawEvents");
+    if (rawEvents) {
+      setRawEvents(rawEvents);
+    }
+  });
+
+  const handleChange = (e) => {
+    setToken(e.target.value);
+    localStorage.setItem("token", e.target.value);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    this.props.importEvents(this.state.rawEvents);
-  }
+    props.importEvents(data.event.myFavorites.items);
+  };
 
-  render() {
-    return (
-      <ReactModal
-        isOpen={this.props.isEventsLoaderShown}
-        contentLabel="Events Loader"
-        onRequestClose={() => this.props.toggleEventsLoader(false)}
+  return (
+    <ReactModal
+      isOpen={props.isEventsLoaderShown}
+      contentLabel="Events Loader"
+      onRequestClose={() => props.toggleEventsLoader(false)}
+    >
+      <Button
+        className="EventsLoader__close"
+        onClick={() => props.toggleEventsLoader(false)}
       >
-        <Button
-          className="EventsLoader__close"
-          onClick={() => this.props.toggleEventsLoader(false)}
-        >
-          Close
-        </Button>
-        <div className="EventsLoader">
-          <h2>Import your sessions</h2>
-          <p>
+        Close
+      </Button>
+      <div className="EventsLoader">
+        <h2>Import your sessions</h2>
+        {/* <p>
             See the how to video:{" "}
             <a
               href="https://www.dropbox.com/s/ox4vf6ahidd3z3y/reinvent-planner.mov?dl=0"
@@ -56,9 +172,9 @@ class EventsLoader extends Component {
             >
               https://www.dropbox.com/s/ox4vf6ahidd3z3y/reinvent-planner.mov?dl=0
             </a>
-          </p>
-          <ol>
-            <li>
+          </p> */}
+        <ol>
+          {/* <li>
               Copy the JS code snippet below: <CodeSnippet />
             </li>
             <li>
@@ -74,30 +190,24 @@ class EventsLoader extends Component {
             </li>
             <li>
               Paste the code snippet into the browser's console and run it.
-            </li>
-            <li>
-              Paste the JSON result in the textarea below and hit Import:
-              <form className="EventsLoader__form" onSubmit={this.handleSubmit}>
-                <textarea
-                  onChange={this.handleChange}
-                  value={this.state.rawEvents}
-                />
-                <Button disabled={this.state.rawEvents.trim().length < 1}>
-                  Import
-                </Button>
-                {this.props.importError && (
-                  <div className="EventsLoader__error">
-                    Sorry, unable to import. The following error happened:
-                    <pre>{this.props.importError}</pre>
-                  </div>
-                )}
-              </form>
-            </li>
-          </ol>
-        </div>
-      </ReactModal>
-    );
-  }
+            </li> */}
+          <li>
+            Paste the JSON result in the textarea below and hit Import:
+            <form className="EventsLoader__form" onSubmit={handleSubmit}>
+              <textarea onChange={handleChange} value={token} />
+              <Button disabled={token.trim().length < 1}>Import</Button>
+              {props.importError && (
+                <div className="EventsLoader__error">
+                  Sorry, unable to import. The following error happened:
+                  <pre>{props.importError}</pre>
+                </div>
+              )}
+            </form>
+          </li>
+        </ol>
+      </div>
+    </ReactModal>
+  );
 }
 
 const mapStateToProps = ({ events }) => ({

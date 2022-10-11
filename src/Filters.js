@@ -15,7 +15,7 @@ class Filters extends Component {
       priorityFilters: this.props.priorities.reduce((accumulator, priority) => {
         return { ...accumulator, [priority]: true };
       }, {}),
-      deletedFilter: { "Show Deleted": false }
+      deletedFilter: { "Show Deleted": false },
     };
 
     this.filterEvents = this.filterEvents.bind(this);
@@ -111,7 +111,7 @@ class Filters extends Component {
         <h2>Filters</h2>
         <form
           className="Filters__form"
-          onSubmit={event => event.preventDefault()}
+          onSubmit={(event) => event.preventDefault()}
         >
           <div>
             <label>
@@ -120,9 +120,9 @@ class Filters extends Component {
               <input
                 type="text"
                 value={this.state.searchQuery}
-                onChange={event =>
+                onChange={(event) =>
                   this.onFilterChange({
-                    searchQuery: event.target.value
+                    searchQuery: event.target.value,
                   })
                 }
               />
@@ -132,7 +132,7 @@ class Filters extends Component {
             <strong>Location:</strong>
             <CheckboxFilterList
               filters={this.state.locationFilters}
-              onFilterChange={newFilters =>
+              onFilterChange={(newFilters) =>
                 this.onFilterChange({ locationFilters: newFilters })
               }
             />
@@ -141,7 +141,7 @@ class Filters extends Component {
             <strong>Type:</strong>
             <CheckboxFilterList
               filters={this.state.typeFilters}
-              onFilterChange={newFilters =>
+              onFilterChange={(newFilters) =>
                 this.onFilterChange({ typeFilters: newFilters })
               }
             />
@@ -151,7 +151,7 @@ class Filters extends Component {
             <CheckboxFilterList
               sort={false}
               filters={this.state.priorityFilters}
-              onFilterChange={newFilters =>
+              onFilterChange={(newFilters) =>
                 this.onFilterChange({ priorityFilters: newFilters })
               }
             />
@@ -161,7 +161,7 @@ class Filters extends Component {
             <CheckboxFilterList
               sort={false}
               filters={this.state.deletedFilter}
-              onFilterChange={newFilters =>
+              onFilterChange={(newFilters) =>
                 this.onFilterChange({ deletedFilter: newFilters })
               }
             />
@@ -172,17 +172,14 @@ class Filters extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     events: getMergedEvents(state),
     isFiltersShown: state.events.isFiltersShown,
     locations: state.events.locations,
     types: state.events.types,
-    priorities: state.events.priorities
+    priorities: state.events.priorities,
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { filterEvents }
-)(Filters);
+export default connect(mapStateToProps, { filterEvents })(Filters);

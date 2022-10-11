@@ -16,9 +16,9 @@ const SessionCalendar = ({ events }) => {
     <div className="Calendar">
       <BigCalendar
         localizer={localizer}
-        defaultDate={new Date(2019, 11, 1)}
+        defaultDate={new Date(2022, 11, 3)}
         defaultView="week"
-        scrollToTime={new Date(2019, 11, 1, 8)}
+        scrollToTime={new Date(2022, 11, 3, 8)}
         tooltipAccessor="tooltip"
         events={events}
         components={{ event: Event }}
@@ -29,17 +29,20 @@ const SessionCalendar = ({ events }) => {
         }}
         eventPropGetter={(event) => {
           const locationColors = {
-            park: "#f9f7dd",
-            aria: "#93b21f",
-            vdara: "#eae7af",
-            cosmopolitan: "#fbc88a",
-            bellagio: "#f6a035",
-            mirage: "#e5ce41",
-            treasure: "#ff7abc",
-            mgm: "#568af9",
-            signature: "#ef4035",
-            linq: "#f37735",
-            "harrah's": "#fff797",
+            "caesars forum": "#93b21f",
+            "mandalay bay": "#f6a035",
+            tbd: "#ff7abc",
+            // park: "#f9f7dd",
+            // aria: "#93b21f",
+            // vdara: "#eae7af",
+            // cosmopolitan: "#fbc88a",
+            // bellagio: "#f6a035",
+            // mirage: "#e5ce41",
+            // treasure: "#ff7abc",
+            "mgm grand": "#568af9",
+            // signature: "#ef4035",
+            // linq: "#f37735",
+            // "harrah's": "#fff797",
             venetian: "#45b9f2",
             wynn: "#7ac142",
             encore: "#7f3f97",
@@ -52,7 +55,7 @@ const SessionCalendar = ({ events }) => {
               styles.color = "#eee";
             } else {
               styles.backgroundColor =
-                locationColors[event.location.split(" ")[0].toLowerCase()];
+                locationColors[event.location.toLowerCase()];
             }
           } catch (error) {}
           return { style: styles };

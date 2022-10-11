@@ -12,39 +12,42 @@ import {
 } from "./types";
 
 function parseEvents(rawEventsJson) {
-  const rawEvents = JSON.parse(rawEventsJson);
+  const rawEvents =
+    typeof rawEventsJson === "object"
+      ? rawEventsJson
+      : JSON.parse(rawEventsJson);
   const events = {};
   const locations = [];
   const types = [];
 
   rawEvents
     // Filter out events that have no time information.
-    .filter((event) => ![event.start, event.end].includes(null))
+    .filter((event) => ![event.startTime, event.endTime].includes(null))
     // Map events to calendar format.
     .forEach((event) => {
       // Process event location.
-      const location =
-        event.location && event.location.split(",")[0].replace("–", "").trim();
-      if (!locations.includes(location)) {
-        locations.push(location);
+      const venue = (event.venue && event.venue.name) || "TBD";
+      if (!locations.includes(venue)) {
+        locations.push(venue);
       }
 
       // Process event type.
-      const type = event.type;
+      const type = event.sessionType.name;
       if (!types.includes(type)) {
         types.push(type);
       }
+      const alias = event.alias;
 
       // Add event to events object.
-      events[event.id] = {
-        id: event.id,
-        title: `${event.abbreviation} (${location}) [${event.type}]`,
-        tooltip: `${event.abbreviation} - ${event.title} (${location}) [${event.type}]`,
-        start: new Date(event.start),
-        end: new Date(event.end),
-        link: event.link,
+      events[alias] = {
+        id: alias,
+        title: `${alias} (${venue}) [${type}]`,
+        tooltip: `${event.name} - ${event.description} (${venue}) [${type}]`,
+        start: new Date(event.startTime),
+        end: new Date(event.endTime),
+        link: "",
         type,
-        location,
+        location: venue,
       };
     });
   return {
@@ -61,6 +64,7 @@ export const loadApp = () => {
 
     const eventsUserData = JSON.parse(localStorage.getItem("eventsUserData"));
 
+    console.log("index.loadApp: import success");
     return {
       type: LOAD_APP_SUCCESS,
       payload: {
@@ -71,6 +75,7 @@ export const loadApp = () => {
       },
     };
   } catch (error) {
+    console.log("index.loadApp: import error", error);
     return {
       type: LOAD_APP_FAIL,
       payload: error.toString(),
@@ -81,12 +86,14 @@ export const loadApp = () => {
 export const importEvents = (rawEventsJson) => {
   try {
     const { events, locations, types } = parseEvents(rawEventsJson);
-    localStorage.setItem("rawEvents", rawEventsJson);
+    // localStorage.setItem("rawEvents", JSON.stringify(rawEventsJson));
+    console.log("index.importEvents: import success");
     return {
       type: IMPORT_EVENTS_SUCCESS,
       payload: { events, locations, types },
     };
   } catch (error) {
+    console.log("index.importEvents: import error", error);
     return {
       type: IMPORT_EVENTS_FAIL,
       payload: error.toString(),
